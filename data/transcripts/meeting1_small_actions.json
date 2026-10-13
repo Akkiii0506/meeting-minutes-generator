@@ -1,0 +1,251 @@
+[
+  {
+    "sentence_id": 10,
+    "task": "Let's highlight it on our board.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 14,
+    "task": "I'll screen share them.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 23,
+    "task": "We need to address both authentication and UI issues.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 28,
+    "task": "I'll refine the color schemes and circulate them for review.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 29,
+    "task": "Mr. Wan, George and I will tackle the authentication bugs head on.",
+    "owners": [
+      "Wan",
+      "George",
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 31,
+    "task": "Let's reconvene tomorrow to review progress.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [
+      {
+        "text": "tomorrow",
+        "date": "2026-10-15"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 37,
+    "task": "Let's start by reviewing our progress from yesterday and plan our next steps.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 43,
+    "task": "Okay, let's update the board with the progress made so far and note the areas that still need attention.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 59,
+    "task": "Let's allocate focused time blocks for each task and keep communication channels open for any roadblocks.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 60,
+    "task": "I'll continue working on the authentication bugs during the first half of the day, collaborating closely with tester one George.",
+    "owners": [
+      "George",
+      "Speaker"
+    ],
+    "deadlines": [
+      {
+        "text": "the first half of the day",
+        "date": null
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 61,
+    "task": "I'll fine tune the UI adjustments in the latter half and ensure consistency across all screens.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [
+      {
+        "text": "the latter half",
+        "date": null
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 75,
+    "task": "Let's mark progress on the board and highlight the areas that need further attention.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 81,
+    "task": "Now, let's address those remaining edge cases in authentication.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 92,
+    "task": "Let's document these cases, implement temporary solutions, and plan for post-release patches.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 97,
+    "task": "I'll draft the release notes with the known issues and temporary solutions.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 98,
+    "task": "I'll collaborate to ensure these issues are well documented and communicated effectively.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 105,
+    "task": "We'll be demonstrating the authentication flow and the UI updates today.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [
+      {
+        "text": "today",
+        "date": "2026-10-14"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 106,
+    "task": "I'll walk you through the testing scenarios we covered.",
+    "owners": [
+      "Speaker",
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 109,
+    "task": "I'll attempt a login with valid credentials.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 121,
+    "task": "Let's switch to the older version for the demo to avoid any further complications.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 141,
+    "task": "You'll prioritize resolving the authentication issue.",
+    "owners": [
+      "Addressee"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 143,
+    "task": "I'll recheck all possible scenarios and log any recurring patterns causing this error.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  },
+  {
+    "sentence_id": 152,
+    "task": "We need to notify the support team about the potential issue with authentication and the plan to fix it post-release.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 154,
+    "task": "We'll draft comprehensive release notes detailing the known issues and temporary solutions.",
+    "owners": [
+      "Team"
+    ],
+    "deadlines": [],
+    "confidence": "medium"
+  },
+  {
+    "sentence_id": 155,
+    "task": "I'll make sure our support documentation is updated highlighting these points for the team.",
+    "owners": [
+      "Speaker"
+    ],
+    "deadlines": [],
+    "confidence": "high"
+  }
+]
