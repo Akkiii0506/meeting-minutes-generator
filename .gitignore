@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+data/audio/
+data/outputs/
+*.pyc
+.ipynb_checkpoints/
