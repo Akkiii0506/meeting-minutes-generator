@@ -1,0 +1,1 @@
+There are some pressing issues that need immediate attention . The authentication process is acting up . Users are experiencing a log in failures . The UI redesign is nearly done, but feedback on the color schemes isn't entirely positive . UI changes are necessary, but must ensure they don't delay the authentication fixes .
