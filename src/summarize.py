@@ -11,9 +11,11 @@ MODELS = {
     "flan-t5-large": "google/flan-t5-large",
     "distilbart": "sshleifer/distilbart-cnn-12-6",
     "bart-large": "facebook/bart-large-cnn",
+    "bart-samsum": "philschmid/bart-large-cnn-samsum",
+    "pegasus-xsum": "google/pegasus-xsum",
 }
-INPUT_LIMIT = {"flan-t5-base": 512, "flan-t5-large": 512,
-               "distilbart": 1024, "bart-large": 1024}
+INPUT_LIMIT = {"flan-t5-base": 512, "flan-t5-large": 512, "distilbart": 1024,
+               "bart-large": 1024, "bart-samsum": 1024, "pegasus-xsum": 512}
 
 CHUNK_PROMPT = "Write a short third-person summary of this meeting excerpt:\n\n"
 FINAL_PROMPT = "Write a short third-person summary of this meeting based on these notes:\n\n"
@@ -74,19 +76,20 @@ def summarize_text(text, name, prompt="", max_new=60, min_new=20):
         )
     return trim_incomplete(fix_spacing(tok.decode(out[0], skip_special_tokens=True).strip()))
 
-def summarize_meeting(sentences, name="flan-t5-base", keywords=None, chunk_tokens=450):
+def summarize_meeting(sentences, name="flan-t5-base", keywords=None,
+                      chunk_tokens=450, second_pass=False):
     sentences = [s for s in sentences if not s.rstrip().endswith("?") and len(s.split()) >= 4]
     tok, _ = load_model(name)
     chunks = chunk_by_tokens(sentences, tok, chunk_tokens)
     partials = [summarize_text(c, name, CHUNK_PROMPT) for c in chunks]
 
-    if len(partials) > 1:
+    if second_pass and len(partials) > 1:
         notes = " ".join(partials)
-        if keywords:                       # ground the final pass in real topics
+        if keywords:
             notes = f"Main topics: {', '.join(keywords[:6])}.\n\n" + notes
         final = summarize_text(notes, name, FINAL_PROMPT, max_new=150, min_new=50)
     else:
-        final = partials[0]
+        final = " ".join(partials)        # chunk summaries cover the whole meeting
     return {"model": name, "chunks": len(chunks), "partials": partials, "final": final}
 
 if __name__ == "__main__":

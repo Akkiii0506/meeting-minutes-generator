@@ -1,0 +1,11 @@
+=== flan-t5-large (Colab GPU) ===
+We're getting closer to the release date, so let's ensure everything is on track. Let's look at the new color schemes. Discuss how we can streamline efforts to maintain our schedule. We'll be demonstrating the authentication flow and the UI updates today.
+
+=== bart-large (Colab GPU) ===
+authentication process is acting up. Users are experiencing a log in failures. Our UI redesign is nearly done, but feedback on the color schemes isn't entirely positive. The UI changes are necessary, but we must ensure they don't delay the authentication fixes. Let's discuss how we can streamline efforts to maintain our schedule.
+
+=== bart-samsum (Colab GPU) ===
+The team is making progress on the authentication and UI issues related to the release of the app. Mr. Wan, George and George will tackle the authentication bugs head on. George will work on authentication bugs during the first half of the day and fine tune the UI adjustments in the latter half. The team will reconvene tomorrow to review progress.
+
+=== pegasus-xsum (Colab GPU) ===
+As the BBC News app prepares for its official launch, the team behind the app has been working hard to make it as easy as possible for users to access the news and features they want - but there are still some issues that need to be addressed.

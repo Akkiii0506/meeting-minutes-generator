@@ -1,0 +1,1 @@
+The team is making progress on the authentication and UI issues related to the release of the app. Mr. Wan, George and George will tackle the authentication bugs head on. George will work on authentication bugs during the first half of the day and fine tune the UI adjustments in the latter half. The team will reconvene tomorrow to review progress.
