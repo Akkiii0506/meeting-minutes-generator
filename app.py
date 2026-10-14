@@ -35,6 +35,9 @@ def clean_str(x):
 def lines(text):
     return [l.strip() for l in text.splitlines() if l.strip()]
 
+def split_commas(text):
+    return [p.strip() for p in text.split(",") if p.strip()]
+
 def action_table(m):
     rows = []
     for a in m["action_items"]:
@@ -57,7 +60,11 @@ with st.sidebar:
     title_in = st.text_input("Meeting title (optional)")
     date_in = st.date_input("Meeting date", value=datetime.now().date())
     people_in = st.text_input("Participants (optional, comma-separated)",
-                              help="Leave empty to detect names automatically.")
+                              help="Leave empty to detect names automatically. "
+                                   "Names given here also help the speech model spell them correctly.")
+    terms_in = st.text_input("Key terms (optional, comma-separated)",
+                             help="Words the speech model often gets wrong, "
+                                  "e.g. login, API, product names.")
     st.caption("The first run of each model downloads it, which can take a few minutes.")
 
 # ---------- upload and run ----------
@@ -71,7 +78,8 @@ if run and uploaded is not None:
     with open(path, "wb") as f:
         f.write(uploaded.getbuffer())
 
-    participants = [p.strip() for p in people_in.split(",") if p.strip()] or None
+    participants = split_commas(people_in) or None
+    terms = split_commas(terms_in) or None
     meeting_date = datetime.combine(date_in, dtime.min)
 
     try:
@@ -80,6 +88,7 @@ if run and uploaded is not None:
                 path, ASR_OPTIONS[asr_label], SUMMARIZERS[sum_label],
                 title_in.strip() or None, meeting_date, participants,
                 progress=status.write,
+                terms=terms,
             )
             status.update(label="Minutes ready", state="complete", expanded=False)
         st.session_state["minutes"] = minutes
@@ -139,7 +148,7 @@ if m:
             continue
         actions.append({
             "task": task,
-            "owners": [o.strip() for o in clean_str(r["Owner"]).split(",") if o.strip()],
+            "owners": split_commas(clean_str(r["Owner"])),
             "deadline": clean_str(r["Deadline"]).strip() or None,
             "deadline_date": None,
             "confidence": "",

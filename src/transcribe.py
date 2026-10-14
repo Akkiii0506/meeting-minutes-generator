@@ -20,11 +20,14 @@ def load_audio(path, sr=16000):
     out = subprocess.run(cmd, capture_output=True, check=True).stdout
     return np.frombuffer(out, np.int16).astype(np.float32) / 32768.0
 
-def transcribe(audio_path, model_size="small", save_dir="data/transcripts"):
-    """Transcribe an audio/video file. Returns (full_text, segments)."""
+def transcribe(audio_path, model_size="small", save_dir="data/transcripts", hint=None):
+    """Transcribe an audio/video file. Returns (full_text, segments).
+    `hint` is an optional short text (participant names, key terms) that helps
+    Whisper spell names and domain words correctly."""
     model = load_model(model_size)
     audio = load_audio(audio_path)
-    segments, info = model.transcribe(audio, beam_size=5, vad_filter=True)
+    segments, info = model.transcribe(audio, beam_size=5, vad_filter=True,
+                                      initial_prompt=hint)
 
     seg_list = []
     for seg in segments:

@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import hashlib
 import argparse
 from datetime import datetime
 
@@ -59,7 +60,7 @@ def find_next_meeting(sentences, base_date):
 # ---------- main pipeline ----------
 def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
                      title=None, meeting_date=None, participants=None,
-                     progress=print):
+                     progress=print, terms=None):
     timings = {}
     stem = os.path.splitext(os.path.basename(path))[0]
     meeting_date = meeting_date or datetime.now()
@@ -70,13 +71,22 @@ def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
         with open(path, encoding="utf-8-sig") as f:
             raw = f.read()
     else:
-        cp = _cache_path(path, f"transcript_{asr_size}")
+        parts = []
+        if participants:
+            parts.append("Meeting participants: " + ", ".join(participants) + ".")
+        if terms:
+            parts.append("Terms: " + ", ".join(terms) + ".")
+        hint = " ".join(parts) or None
+        tag = f"transcript_{asr_size}"
+        if hint:
+            tag += "_" + hashlib.md5(hint.encode("utf-8")).hexdigest()[:6]
+        cp = _cache_path(path, tag)
         cached = _load_cache(cp)
         if cached:
             raw = cached["text"]
         else:
             progress("Transcribing audio...")
-            raw, _ = T.transcribe(path, asr_size, save_dir=CACHE_DIR)
+            raw, _ = T.transcribe(path, asr_size, save_dir=CACHE_DIR, hint=hint)
             _save_cache(cp, {"text": raw})
     timings["transcription"] = round(time.time() - t0, 1)
 
@@ -111,7 +121,7 @@ def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
         if cached:
             summary = cached["summary"]
         else:
-            progress(f"Summarizing with {summarizer} (can take several minutes on CPU)...")
+            progress(f"Summarizing with {summarizer} (can take a minute on CPU)...")
             res = S.summarize_meeting(sentences, summarizer)
             summary = res["final"]
             _save_cache(sp, {"summary": summary, "chunks": res["partials"]})
@@ -172,6 +182,7 @@ if __name__ == "__main__":
     ap.add_argument("--title")
     ap.add_argument("--date", help="YYYY-MM-DD")
     ap.add_argument("--participants", help="comma-separated names")
+    ap.add_argument("--terms", help="comma-separated key terms, e.g. login, API")
     a = ap.parse_args()
 
     result = generate_minutes(
@@ -180,6 +191,7 @@ if __name__ == "__main__":
         a.title,
         datetime.strptime(a.date, "%Y-%m-%d") if a.date else None,
         [p.strip() for p in a.participants.split(",")] if a.participants else None,
+        terms=[t.strip() for t in a.terms.split(",") if t.strip()] if a.terms else None,
     )
     print("\n" + "=" * 60)
     print(format_minutes_text(result))

@@ -14,11 +14,15 @@ TRIGGER = re.compile(
 )
 REQUEST = re.compile(r"\b(?:can|could|would) you\b|\bplease\b", re.IGNORECASE)
 DEADLINE_LABELS = {"DATE", "TIME", "DEADLINE"}
+
+# Vague team talk that is not a concrete task
 VAGUE = re.compile(
     r"\b(ensure|aim|focus|strategi[sz]e|remain|maintain|dive|monitor|"
     r"success(?:ful)?|smooth(?:ly)?|discuss|weigh|streamline)\b",
     re.IGNORECASE,
 )
+
+ROLE_PREFIX = r"^(?:tester|developer|dev|qa|manager|engineer|designer)\s+"
 
 def is_action(doc):
     text = doc.text
@@ -39,6 +43,8 @@ def find_owners(doc):
             continue
         name = re.sub(r"[^A-Za-z\s\.'-]", "", ent.text).strip()
         name = re.sub(TITLES, "", name, flags=re.IGNORECASE)
+        name = re.sub(r"\s+", " ", name).strip()
+        name = re.sub(ROLE_PREFIX, "", name, flags=re.IGNORECASE)   # "Tester George" -> "George"
         if len(name) > 1 and name[0].isupper() and name.lower() not in NOT_NAMES:
             owners.append(name.title())
     low = doc.text.lower()
@@ -71,9 +77,9 @@ def classify(doc, owners, deadlines):
     if specific or deadlines:
         return "high"
     if owners == ["Unassigned"]:
-        return None                           
+        return None                           # nobody is responsible
     if VAGUE.search(doc.text):
-        return None                           
+        return None                           # vague team talk
     return "medium"
 
 def extract_action_items(sentences, meeting_date=None):
@@ -99,7 +105,7 @@ def extract_action_items(sentences, meeting_date=None):
 
 if __name__ == "__main__":
     import sys, os
-    path = sys.argv[1]   
+    path = sys.argv[1]   # a *_sentences.txt file
     with open(path, encoding="utf-8") as f:
         sentences = [line.strip() for line in f if line.strip()]
 
