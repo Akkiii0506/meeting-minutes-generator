@@ -4,3 +4,5 @@ data/audio/
 data/outputs/
 *.pyc
 .ipynb_checkpoints/
+data/uploads/
+data/cache/

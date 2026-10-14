@@ -5,14 +5,13 @@ import subprocess
 import numpy as np
 from faster_whisper import WhisperModel
 
-_model = None
+_models = {}
 
 def load_model(size="small"):
-    """Load the Whisper model once and reuse it."""
-    global _model
-    if _model is None:
-        _model = WhisperModel(size, device="cpu", compute_type="int8")
-    return _model
+    """Load each Whisper size once and reuse it."""
+    if size not in _models:
+        _models[size] = WhisperModel(size, device="cpu", compute_type="int8")
+    return _models[size]
 
 def load_audio(path, sr=16000):
     """Decode any audio/video file to a 16 kHz mono float32 array using ffmpeg."""
