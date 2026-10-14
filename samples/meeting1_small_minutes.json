@@ -1,0 +1,268 @@
+{
+  "title": "Sprint Meeting",
+  "date": "2026-10-14",
+  "source_file": "meeting1_small.txt",
+  "participants": [
+    "George",
+    "Wan"
+  ],
+  "agenda": [
+    "Authentication UI",
+    "Collaboration Testers",
+    "Maintain Schedule",
+    "Release Fixes",
+    "Login Screen",
+    "Input Credentials"
+  ],
+  "summary": "The team is making progress on the authentication and UI issues related to the release of the app. Mr. Wan, George and George will tackle the authentication bugs head on. The team will reconvene tomorrow to review progress. The team is working on the release of the app. They need to focus on the UI changes and the authentication bug fixes. George will work on the authentication bugs during the first half of the day. He will fine tune the UI adjustments in the latter half. There was a hiccup with authentication during the demo of the new login screen. The issue was fixed temporarily, but it's still causing problems. It's a priority to resolve the issue before the official launch. I'll make sure our support documentation is updated highlighting these points for the team. Post-release, we'll communicate that to our users. Let's set up a post-release review meeting to discuss the authentication fix and gather feedback.",
+  "key_decisions": [
+    "Let's switch to the older version for the demo to avoid any further complications."
+  ],
+  "action_items": [
+    {
+      "task": "Let's highlight it on our board.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "I'll screen share them.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "We need to address both authentication and UI issues.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "I'll refine the color schemes and circulate them for review.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "Mr. Wan, George and I will tackle the authentication bugs head on.",
+      "owners": [
+        "Wan",
+        "George",
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "Let's start by reviewing our progress from yesterday and plan our next steps.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "Okay, let's update the board with the progress made so far and note the areas that still need attention.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "Let's allocate focused time blocks for each task and keep communication channels open for any roadblocks.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "I'll continue working on the authentication bugs during the first half of the day, collaborating closely with tester one George.",
+      "owners": [
+        "George",
+        "Speaker"
+      ],
+      "deadline": "the first half of the day",
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "I'll fine tune the UI adjustments in the latter half and ensure consistency across all screens.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": "the latter half",
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "Let's mark progress on the board and highlight the areas that need further attention.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "Now, let's address those remaining edge cases in authentication.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "Let's document these cases, implement temporary solutions, and plan for post-release patches.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "I'll draft the release notes with the known issues and temporary solutions.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "I'll collaborate to ensure these issues are well documented and communicated effectively.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "We'll be demonstrating the authentication flow and the UI updates today.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": "today",
+      "deadline_date": "2026-10-14",
+      "confidence": "high"
+    },
+    {
+      "task": "I'll walk you through the testing scenarios we covered.",
+      "owners": [
+        "Speaker",
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "I'll attempt a login with valid credentials.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "You'll prioritize resolving the authentication issue.",
+      "owners": [
+        "Addressee"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "I'll recheck all possible scenarios and log any recurring patterns causing this error.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    },
+    {
+      "task": "We need to notify the support team about the potential issue with authentication and the plan to fix it post-release.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "We'll draft comprehensive release notes detailing the known issues and temporary solutions.",
+      "owners": [
+        "Team"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "medium"
+    },
+    {
+      "task": "I'll make sure our support documentation is updated highlighting these points for the team.",
+      "owners": [
+        "Speaker"
+      ],
+      "deadline": null,
+      "deadline_date": null,
+      "confidence": "high"
+    }
+  ],
+  "keywords": [
+    "ui updates",
+    "authentication bugs",
+    "ui changes",
+    "authentication fix",
+    "release fixes",
+    "color schemes",
+    "release date",
+    "authentication critical",
+    "login valid",
+    "authentication plan"
+  ],
+  "next_meeting": [
+    {
+      "sentence": "Let's reconvene tomorrow to review progress.",
+      "when": "tomorrow",
+      "date": "2026-10-15"
+    },
+    {
+      "sentence": "Let's set up a post-release review meeting to discuss the authentication fix and gather feedback.",
+      "when": null,
+      "date": null
+    }
+  ],
+  "models": {
+    "asr": null,
+    "summarizer": "bart-samsum"
+  },
+  "timings_seconds": {
+    "transcription": 0.0,
+    "preprocessing": 0.9,
+    "extraction": 10.6,
+    "summarization": 32.5
+  }
+}
