@@ -6,13 +6,14 @@ from datetime import datetime, time as dtime
 import pandas as pd
 import streamlit as st
 
-from src.pipeline import generate_minutes
+from src.pipeline import generate_minutes, MinutesError
 from src.export import export_docx, export_pdf
 
 st.set_page_config(page_title="AI Meeting Minutes Generator",
                    page_icon="📝", layout="wide")
 
 UPLOAD_DIR = "data/uploads"
+LARGE_FILE_MB = 150
 ASR_OPTIONS = {"base (fast)": "base", "small (more accurate)": "small"}
 SUMMARIZERS = {
     "BART-SAMSUM (best for dialogue)": "bart-samsum",
@@ -50,7 +51,8 @@ def action_table(m):
 # ---------- header ----------
 st.title("📝 AI Meeting Minutes Generator")
 st.caption("Upload a meeting recording or transcript and get structured minutes: "
-           "summary, decisions, action items and more.")
+           "summary, decisions, action items and more. Works best with clear, "
+           "English-language recordings.")
 
 # ---------- sidebar ----------
 with st.sidebar:
@@ -70,6 +72,10 @@ with st.sidebar:
 # ---------- upload and run ----------
 uploaded = st.file_uploader("Meeting recording or transcript",
                             type=["mp3", "wav", "mp4", "m4a", "webm", "txt"])
+
+if uploaded is not None and uploaded.size > LARGE_FILE_MB * 1024 * 1024:
+    st.warning(f"This file is larger than {LARGE_FILE_MB} MB. Processing may take a long time.")
+
 run = st.button("Generate minutes", type="primary", disabled=uploaded is None)
 
 if run and uploaded is not None:
@@ -82,19 +88,28 @@ if run and uploaded is not None:
     terms = split_commas(terms_in) or None
     meeting_date = datetime.combine(date_in, dtime.min)
 
+    status = st.status("Generating minutes...", expanded=True)
     try:
-        with st.status("Generating minutes...", expanded=True) as status:
-            minutes = generate_minutes(
-                path, ASR_OPTIONS[asr_label], SUMMARIZERS[sum_label],
-                title_in.strip() or None, meeting_date, participants,
-                progress=status.write,
-                terms=terms,
-            )
-            status.update(label="Minutes ready", state="complete", expanded=False)
+        minutes = generate_minutes(
+            path, ASR_OPTIONS[asr_label], SUMMARIZERS[sum_label],
+            title_in.strip() or None, meeting_date, participants,
+            progress=status.write,
+            terms=terms,
+        )
+        status.update(label="Minutes ready", state="complete", expanded=False)
         st.session_state["minutes"] = minutes
         st.session_state["run_id"] = st.session_state.get("run_id", 0) + 1
+    except MinutesError as e:
+        status.update(label="Could not create the minutes", state="error", expanded=False)
+        st.session_state.pop("minutes", None)
+        st.error(str(e))
     except Exception as e:
-        st.error(f"Something went wrong: {e}")
+        status.update(label="Something unexpected went wrong", state="error", expanded=False)
+        st.session_state.pop("minutes", None)
+        st.error("Something unexpected went wrong while creating the minutes. "
+                 "Please try again, or try a different file.")
+        with st.expander("Technical details"):
+            st.exception(e)
 
 # ---------- review and edit ----------
 m = st.session_state.get("minutes")
@@ -102,6 +117,8 @@ if m:
     rid = st.session_state["run_id"]
     st.divider()
     st.subheader("Review and edit")
+    for w in m.get("warnings", []):
+        st.warning(w)
     st.info("This is an AI-generated draft. Check names, tasks and the summary before "
             "sharing. 'Speaker' means the person saying 'I' (the transcript has no "
             "speaker labels).")
