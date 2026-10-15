@@ -97,7 +97,7 @@ def find_next_meeting(sentences, base_date):
 # ---------- main pipeline ----------
 def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
                      title=None, meeting_date=None, participants=None,
-                     progress=print, terms=None):
+                     progress=print, terms=None, neutral_speaker=True):
     timings = {}
     warn_list = []
     stem = os.path.splitext(os.path.basename(path))[0]
@@ -176,13 +176,13 @@ def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
     t0 = time.time()
     if summarizer:
         try:
-            sp = _cache_path(path, f"summary_{summarizer}")
+            sp = _cache_path(path, f"summary_{summarizer}" + ("-neutral" if neutral_speaker else ""))
             cached = _load_cache(sp)
             if cached:
                 summary = cached["summary"]
             else:
                 progress(f"Summarizing with {summarizer} (can take a minute on CPU)...")
-                res = S.summarize_meeting(sentences, summarizer)
+                res = S.summarize_meeting(sentences, summarizer, neutral_speaker=neutral_speaker)
                 summary = res["final"]
                 _save_cache(sp, {"summary": summary, "chunks": res["partials"]})
         except Exception as e:
@@ -194,6 +194,9 @@ def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
             progress("Summary skipped because of an error.")
     timings["summarization"] = round(time.time() - t0, 1)
 
+    if summary and neutral_speaker:
+        warn_list.append("In the summary, 'the speaker' stands for the person saying 'I'. "
+                         "Replace it with the real name if you know who it was.")
     if not actions:
         warn_list.append("No action items were detected in this recording.")
     if not decisions:
@@ -217,7 +220,8 @@ def generate_minutes(path, asr_size="small", summarizer="flan-t5-base",
         "keywords": keywords,
         "next_meeting": next_meeting,
         "models": {"asr": asr_size if not path.lower().endswith(".txt") else None,
-                   "summarizer": summarizer},
+                   "summarizer": summarizer,
+                   "speaker_neutral": bool(neutral_speaker)},
         "warnings": warn_list,
         "timings_seconds": timings,
     }
@@ -252,12 +256,14 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("path", help="audio/video file or .txt transcript")
     ap.add_argument("--asr", default="small")
-    ap.add_argument("--summarizer", default="flan-t5-base",
+    ap.add_argument("--summarizer", default="bart-samsum",
                     help="flan-t5-base, distilbart, bart-samsum, ... or 'none'")
     ap.add_argument("--title")
     ap.add_argument("--date", help="YYYY-MM-DD")
     ap.add_argument("--participants", help="comma-separated names")
     ap.add_argument("--terms", help="comma-separated key terms, e.g. login, API")
+    ap.add_argument("--no-neutral", action="store_true",
+                    help="do not replace 'I' with 'the speaker' before summarizing")
     a = ap.parse_args()
 
     try:
@@ -268,6 +274,7 @@ if __name__ == "__main__":
             datetime.strptime(a.date, "%Y-%m-%d") if a.date else None,
             [p.strip() for p in a.participants.split(",")] if a.participants else None,
             terms=[t.strip() for t in a.terms.split(",") if t.strip()] if a.terms else None,
+            neutral_speaker=not a.no_neutral,
         )
     except MinutesError as e:
         raise SystemExit(f"Error: {e}")

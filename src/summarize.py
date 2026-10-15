@@ -58,6 +58,27 @@ def fix_spacing(text):
     """Remove the space the tokenizer leaves before punctuation."""
     return re.sub(r"\s+([.,!?;:])", r"\1", text)
 
+def neutralize_first_person(text):
+    """Replace 'I', 'my', 'me' with 'the speaker' so the summarizer does not
+    guess which named person 'I' refers to."""
+    rules = [
+        (r"\bI[’']ll\b", "the speaker will"),
+        (r"\bI[’']ve\b", "the speaker has"),
+        (r"\bI[’']m\b", "the speaker is"),
+        (r"\bI[’']d\b", "the speaker would"),
+        (r"\bI am\b", "the speaker is"),
+        (r"\bI have\b", "the speaker has"),
+        (r"\bI was\b", "the speaker was"),
+        (r"\bI\b", "the speaker"),
+        (r"\bmyself\b", "the speaker"),
+        (r"\bMy\b", "The speaker's"),
+        (r"\bmy\b", "the speaker's"),
+        (r"\bme\b", "the speaker"),
+    ]
+    for pattern, repl in rules:
+        text = re.sub(pattern, repl, text)
+    return text[:1].upper() + text[1:]
+
 def summarize_text(text, name, prompt="", max_new=60, min_new=20):
     tok, model = load_model(name)
     if "t5" in name:                       # only T5 models use instructions
@@ -77,8 +98,12 @@ def summarize_text(text, name, prompt="", max_new=60, min_new=20):
     return trim_incomplete(fix_spacing(tok.decode(out[0], skip_special_tokens=True).strip()))
 
 def summarize_meeting(sentences, name="flan-t5-base", keywords=None,
-                      chunk_tokens=450, second_pass=False):
+                      chunk_tokens=450, second_pass=False, neutral_speaker=False):
+    # Questions and very short sentences carry little information
     sentences = [s for s in sentences if not s.rstrip().endswith("?") and len(s.split()) >= 4]
+    if neutral_speaker:
+        sentences = [neutralize_first_person(s) for s in sentences]
+
     tok, _ = load_model(name)
     chunks = chunk_by_tokens(sentences, tok, chunk_tokens)
     partials = [summarize_text(c, name, CHUNK_PROMPT) for c in chunks]
@@ -93,30 +118,33 @@ def summarize_meeting(sentences, name="flan-t5-base", keywords=None,
     return {"model": name, "chunks": len(chunks), "partials": partials, "final": final}
 
 if __name__ == "__main__":
-    path = sys.argv[1]                                   # a *_sentences.txt file
-    name = sys.argv[2] if len(sys.argv) > 2 else "flan-t5-base"
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    neutral = "--neutral" in sys.argv
+    path = args[0]                                       # a *_sentences.txt file
+    name = args[1] if len(args) > 1 else "flan-t5-base"
 
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8-sig") as f:
         sentences = [line.strip() for line in f if line.strip()]
 
-    # Use the keywords from Day 7 if that file exists
     keywords = None
     insights_path = path.replace("_sentences.txt", "_insights.json")
     if os.path.exists(insights_path):
-        with open(insights_path, encoding="utf-8") as f:
+        with open(insights_path, encoding="utf-8-sig") as f:
             keywords = json.load(f).get("keywords")
 
     start = time.time()
-    result = summarize_meeting(sentences, name, keywords)
+    result = summarize_meeting(sentences, name, keywords, neutral_speaker=neutral)
     elapsed = time.time() - start
 
-    print(f"Model: {name} | chunks: {result['chunks']} | time: {elapsed:.1f}s\n")
+    label = f"{name} (speaker-neutral)" if neutral else name
+    print(f"Model: {label} | chunks: {result['chunks']} | time: {elapsed:.1f}s\n")
     for i, p in enumerate(result["partials"], 1):
         print(f"Chunk {i}: {p}\n")
     print("FINAL SUMMARY:\n", result["final"])
 
     base = os.path.basename(path).replace("_sentences.txt", "")
-    out_path = os.path.join(os.path.dirname(path), f"{base}_summary_{name}.txt")
+    suffix = f"{name}-neutral" if neutral else name
+    out_path = os.path.join(os.path.dirname(path), f"{base}_summary_{suffix}.txt")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(result["final"])
     print("\nSaved to", out_path)

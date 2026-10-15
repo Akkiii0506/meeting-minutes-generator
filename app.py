@@ -59,6 +59,9 @@ with st.sidebar:
     st.header("Settings")
     asr_label = st.selectbox("Speech recognition model", list(ASR_OPTIONS), index=1)
     sum_label = st.selectbox("Summarization model", list(SUMMARIZERS), index=0)
+    neutral_in = st.checkbox("Write 'the speaker' instead of 'I' in the summary", value=True,
+                             help="The recording has no speaker labels. This stops the summary "
+                                  "from crediting the speaker's tasks to a named person.")
     title_in = st.text_input("Meeting title (optional)")
     date_in = st.date_input("Meeting date", value=datetime.now().date())
     people_in = st.text_input("Participants (optional, comma-separated)",
@@ -95,6 +98,7 @@ if run and uploaded is not None:
             title_in.strip() or None, meeting_date, participants,
             progress=status.write,
             terms=terms,
+            neutral_speaker=neutral_in,
         )
         status.update(label="Minutes ready", state="complete", expanded=False)
         st.session_state["minutes"] = minutes
