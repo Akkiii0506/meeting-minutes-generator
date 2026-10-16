@@ -9,8 +9,7 @@ import streamlit as st
 from src.pipeline import generate_minutes, MinutesError
 from src.export import export_docx, export_pdf
 
-st.set_page_config(page_title="AI Meeting Minutes Generator",
-                   page_icon="📝", layout="wide")
+st.set_page_config(page_title="Meeting Minutes Generator", layout="wide")
 
 UPLOAD_DIR = "data/uploads"
 LARGE_FILE_MB = 150
