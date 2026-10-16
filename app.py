@@ -48,7 +48,7 @@ def action_table(m):
     return pd.DataFrame(rows, columns=["Task", "Owner", "Deadline"])
 
 # ---------- header ----------
-st.title("📝 AI Meeting Minutes Generator")
+st.title("Meeting Minutes Generator")
 st.caption("Upload a meeting recording or transcript and get structured minutes: "
            "summary, decisions, action items and more. Works best with clear, "
            "English-language recordings.")
